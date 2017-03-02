@@ -1,12 +1,12 @@
-﻿├───data                 # raw data from kaggle
-	├───test.json         # testing set
-	├───train.json        # training set
-	└───images_sample     # sample images
-├───fig					 # figures/plots/etc
-├───processed			 # processed data
-├───scripts				 # scripts
-├───README.md
-├───file_structure.md
-├───requirements.txt      # required python libraries
+﻿├───data                 # raw data from kaggle\n
+	├───test.json         # testing set\n
+	├───train.json        # training set\n
+	└───images_sample     # sample images\n
+├───fig					 # figures/plots/etc\n
+├───processed			 # processed data\n
+├───scripts				 # scripts\n
+├───README.md\n
+├───file_structure.md\n
+├───requirements.txt      # required python libraries\n
 └───.gitignore
 
