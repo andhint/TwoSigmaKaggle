@@ -1,0 +1,74 @@
+DATA PREPROCESSING AND FEATURE ENGINEERING 
+	-all done in feature_engineering.ipynb
+
+	Categorical Data: interest_level(target), building_id, manager_id
+		-used LabelEncoder() to create numerical representation
+
+	Original Numerical Data: bathrooms, bedrooms, latitude, longitude, price
+		-leave as is for now
+
+	Created Numerical Data: 
+		num_photos (# of photos listing has)
+		num_features (# of features listed in feature string)
+		num_description (# of words in description)
+		created_year (year listing was created)
+		created_month (month listing was created)
+		created_day (day listing was created)
+
+	Text Data: features, description, display address
+		-created document term matrix using CountVectorizer()
+			-currently using max_features=200
+		-use pickle to save each feature into its own .dat file
+			-too large to convert to dataframe
+			-if using to predict with a Dataframe use sparse.hstack([dtm,DF])
+
+	Output:
+		-4 files saved to /processed/
+			-1 .csv file containing numerical and categorical data
+			-3 .dat file containing pickled DTM for each text feature
+
+MODEL SELECTION AND HYPERPARAMETER TUNING
+	
+	First, tried a few different models using train_test_split for time and varied 
+	hyperparameters to get an idea of the most accurate model. To start I used
+	all numerical and categorical features from the processed.csv. Text features were 
+	looked at later.
+
+	The idea was not to do an exhaustive grid search for each classifier but to see which
+	ones are worth pursuing.
+
+	Models tried with their best accuracy:
+		-accuracy evaluated using multi-class logarithmic log loss as stated on Kaggle
+			-sklearn.metrics.log_loss
+			-calculated using predicted probabilities for each class
+			-therefore can only use model capable of predicting prob for each class
+				-use clf.predict_proba() method
+
+	RandomForestClassifier() ~1.61696    549ns  
+		(n_estimators=500) ~0.60398    27.5s
+		(n_estimators=2000) ~0.60169    1m49s
+
+	LogisticRegression() ~0.70157    1.35s
+		(C=2) ~0.7088    1.26s
+			-no real change varying C
+		-no real change varying max_iter
+		(solver='sag', max_iter=2000) ~0.7494    30s
+		(solver='newton-cg', max_iter=200) ~0.7078    6.07s
+		(solver='lbfgs') ~0.71818    939ns
+		(solver='newton-cg', multi_class='ovr') ~0.7078    5.81s
+
+	DecisionTreeClassifier() ~11.77157    293ns
+		(criterion='entropy') ~11.6877    412ns
+		(splitter='random') ~12.8442    96ns
+
+	ExtraTreesClassifier() ~1.8414    347ns
+		(n_estimators=1000) ~0.6922    33.4s
+
+	GradientBoostingClassifier() ~0.61663    7.7s
+		(n_estimators=1000) ~0.5785    1m12s
+		(n_estimators=2000) ~0.5821    2m27s
+		(max_depth=5) ~0.5908    14.6s
+		(n_estimators=1000,max_depth=5) ~0.5965    2m23s
+
+	SVM() -takes far too long to run, and didn't make up for it with accuracy
+
