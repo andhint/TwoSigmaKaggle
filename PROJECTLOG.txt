@@ -1,4 +1,7 @@
-DATA PREPROCESSING AND FEATURE ENGINEERING 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DATA PREPROCESSING AND FEATURE ENGINEERING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 	-all done in feature_engineering.ipynb
 
 	Categorical Data: interest_level(target), building_id, manager_id
@@ -27,8 +30,10 @@ DATA PREPROCESSING AND FEATURE ENGINEERING
 			-1 .csv file containing numerical and categorical data
 			-3 .dat file containing pickled DTM for each text feature
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 MODEL SELECTION AND HYPERPARAMETER TUNING
-	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 	First, tried a few different models using train_test_split for time and varied 
 	hyperparameters to get an idea of the most accurate model. To start I used
 	all numerical and categorical features from the processed.csv. Text features were 
@@ -72,3 +77,64 @@ MODEL SELECTION AND HYPERPARAMETER TUNING
 
 	SVM() -takes far too long to run, and didn't make up for it with accuracy
 
+	%%%%%%%%%%%%%%% TEXT DATA %%%%%%%%%%%%%%
+	Now, looking at text features:
+		-set max_features=200 in CountVectorizer to keep things managable
+
+	FEATURES DTM
+
+	MultinomialNB(alpha=0.01, class_prior=[0.08,0.68,0.24]) ~0.82214    10ns
+
+	LogisticRegression() ~0.74562    1.08s
+
+	RandomForestClassifier() ~1.6546    3.56s
+		(n_estimators=100) ~1.1369    35.4s
+
+	GradientBoostingClassifier() ~0.73268    1m25s
+		(n_estimators=100) ~0.73271    1m27s
+			-note: can't take in CSR, need to use .toarray() method to fit and predict
+				-for larger DTMs this may be too large for memory
+
+	DESCRIPTION DTM
+
+	MultinomialNB() ~1.04017    17ns
+	(alpha=0.01, class_prior=[0.08,0.68,0.24]) ~1.0474    16ns
+
+	LogisticRegression() ~0.74925    3.54s
+
+	RandomForestClassifier() ~2.2972    13.5s
+	(n_estimators=100) ~0.8786    2m15s
+
+	GradientBoostingClassifier() ~0.7306    1m39s
+
+	DISPLAY ADDRESS DTM
+
+	MultinomialNB() ~0.7657    8ms
+	(alpha=0.01, class_prior=[0.08,0.68,0.24]) ~0.77394    8ms
+
+	LogisticRegression() ~0.7710    214ns
+
+	RandomForestClassifier() ~1.0389   863ns
+	(n_estimators=100) ~0.94308    8.45s
+	(n_estimators=1000) ~0.91218    1m26s
+
+	GradientBoostingClasifier() ~0.77003    1m24s
+	(n_estimators=100) ~0.77005    1m23s
+
+
+	%%%%%% ALL FEATURES WITH TEXT DATA %%%%
+	-use sparse.hstack([]) to combine everything
+
+	LogisticRegression() ~0.77103    207ns
+
+	RandomForestClassifier() ~1.035    832ms
+	(n_estimators=2000) ~0.9044    2m56s
+
+	GradientBoostingClassifier() ~0.60322    7m07s
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+SUBMITTED MODELS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
