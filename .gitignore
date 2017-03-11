@@ -1,5 +1,5 @@
 # Ipython checkpoints
-src/.ipynb_checkpoints
+.ipynb_checkpoints
 
 # Ignore Data and processed folders
 data
