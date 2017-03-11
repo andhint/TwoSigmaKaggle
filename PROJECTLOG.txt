@@ -122,7 +122,7 @@ MODEL SELECTION AND HYPERPARAMETER TUNING
 	(n_estimators=100) ~0.77005    1m23s
 
 
-	%%%%%% ALL FEATURES WITH TEXT DATA %%%%
+	%%%%%% ALL FEATURES WITH TEXT DATA %%%%%%%%%%%%%%
 	-use sparse.hstack([]) to combine everything
 
 	LogisticRegression() ~0.77103    207ns
